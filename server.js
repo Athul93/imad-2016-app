@@ -6,6 +6,14 @@ var crypto = require('crypto');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+var config = {
+    user: 'athul98',
+    database: 'athul93',
+    host: 'db.imad.hasura-app.io',
+    port: '5432',
+    password: process.env.DB_PASSWORD
+};
+
 var app = express();
 app.use(morgan('combined'));
 
@@ -95,23 +103,7 @@ app.get('/logout', function (req, res) {
    res.send('Logged out');
 });
 
-
-var counter = 0;
-app.get('/counter', function (req, res) {
-   counter = counter + 1;
-   res.send(counter.toString());
-});
-
-var names = [];
-app.get('/submit-name', function(req, res) { // /submit-name?name=xxxx
-  // Get the name from the request
-  var name = req.query.name;
-  
-  names.push(name);
-  // JSON: Javascript Object Notation
-  res.send(JSON.stringify(names));
-});
-
+var pool = new Pool(config);
 
 
 app.get('/ui/madi.png', function (req, res) {
